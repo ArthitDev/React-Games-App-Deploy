@@ -5,14 +5,14 @@ import { ApiProvider } from "./api/ApiContext";
 import Homepage from "./components/Homepage";
 import Nav from "./components/Nav";
 import Contact from "./components/Contact";
-import TableData from "./components/tabledata";
+// import TableData from "./components/tabledata";
 import Page404 from "./components/Page404";
 import AddGameForm from "./components/AddGameForm";
-import CommentForm from "./components/CommentForm";
+// import CommentForm from "./components/CommentForm";
 import Footer from "./components/Footer";
 import Dashboard from "./components/Dashboard";
 import Login from "./components/Login";
-import LoginWithLocalStorage from "./components/LoginWithLocalStorage";
+// import LoginWithLocalStorage from "./components/LoginWithLocalStorage";
 import UserDashboard from "./components/UserDashboard";
 
 const theme = extendTheme();
