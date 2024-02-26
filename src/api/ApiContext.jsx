@@ -3,7 +3,7 @@ import React, { createContext, useContext, useState } from "react";
 const ApiContext = createContext();
 
 export const ApiProvider = ({ children }) => {
-  const [apiUrl, setApiUrl] = useState("https://games-api.000webhostapp.com/");
+  const [apiUrl, setApiUrl] = useState("http://localhost:5000/games");
 
   return (
     <ApiContext.Provider value={{ apiUrl, setApiUrl }}>

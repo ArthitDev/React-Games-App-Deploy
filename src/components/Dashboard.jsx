@@ -133,13 +133,16 @@ const Dashboard = () => {
 
   const handleUpdate = async () => {
     try {
+      console.log("Before axios.put:", modalData);
+
       const response = await axios.put(
         `${apiUrl}/${modalData.game_id}`,
         modalData
       );
-      console.log("Data updated:", response.data);
 
-      // Close the update modal and refresh data
+      console.log("Data updated:", response.data);
+      console.log(modalData.game_id);
+
       closeUpdateModal();
       fetchData();
     } catch (error) {
@@ -235,8 +238,7 @@ const Dashboard = () => {
   return (
     <ChakraProvider>
       <Text textAlign="center" fontSize="30px" fontWeight="bold" mt={10}>
-        หน้าจัดการข้อมูลเกม,
-        ยินดีต้อนรับผู้ดูแลระบบ !
+        หน้าจัดการข้อมูลเกม, ยินดีต้อนรับผู้ดูแลระบบ !
       </Text>
       <Flex justifyContent="space-between">
         <Button

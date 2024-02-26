@@ -21,7 +21,7 @@ import SearchBox from "./SearchBox";
 import ImageSlideshow from "./ImageSlideshow";
 import ArrowUpButton from "./ArrowUpButton";
 import FilterSelect from "./FilterSelect";
-import './GameModal.css'
+import "./GameModal.css";
 
 function Homepage() {
   const { apiUrl } = useApi();

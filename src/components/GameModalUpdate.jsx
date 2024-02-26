@@ -56,7 +56,7 @@ const GameModalUpdate = ({
             <FormLabel>ประเภทเกม ณ ตอนนี้</FormLabel>
             <Input
               value={modalData.game_type}
-              // onChange={(e) => handleInputChange("game_type", e.target.value)}
+              onChange={(e) => handleInputChange("game_type", e.target.value)}
             />
           </FormControl>
           <FormControl mb={4}>

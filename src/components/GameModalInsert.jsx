@@ -37,20 +37,18 @@ const GameModalInsert = ({
             <FormLabel>คำอธิบาย</FormLabel>
             <Input
               value={modalData.game_description}
-              onChange={(e) =>
-                handleInputChange("game_description", e.target.value)
-              }
+              onChange={(e) => handleInputChange("game_description", e.target.value)}
             />
             <FormLabel>รูปภาพ</FormLabel>
             <Input
               value={modalData.img}
               onChange={(e) => handleInputChange("img", e.target.value)}
             />
-            <FormLabel>ประเภทเกม ณ ตอนนี้</FormLabel>
+            {/* <FormLabel>ประเภทเกม ณ ตอนนี้</FormLabel>
             <Input
               value={modalData.game_type}
-              // onChange={(e) => handleInputChange("game_type", e.target.value)}
-            />
+              onChange={(e) => handleInputChange("game_type", e.target.value)}
+            /> */}
             <FormLabel>เลือกประเภทเกม</FormLabel>
             <Select
               value={modalData.game_type}
