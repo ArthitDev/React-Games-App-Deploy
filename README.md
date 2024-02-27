@@ -4,3 +4,6 @@
 - 2.ติดตั้ง Package และ Dependencies ด้วยคำสั่ง npm i , pnpm i 
 - 3.ทดสอบโดยการรัน Project ด้วยคำสั่ง npm run dev , pnpm run dev 
 สามารถนำไปประยุกต์ใช้งานต่างๆได้ 
+Web : Demo
+Not Complete : Call API Block By Cors
+Link : https://react-games-voting.vercel.app/
