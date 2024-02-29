@@ -36,7 +36,7 @@ const Contact = () => {
         justifyContent="center"
         mt="50"
       >
-        <Box p={8} borderWidth={1} mt={-20} borderRadius="lg">
+        <Box p={8} mt={-20}>
           <Flex direction="column" alignItems="center">
             <Image
               src="./images/Profile.jpg"
