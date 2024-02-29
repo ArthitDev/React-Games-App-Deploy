@@ -17,12 +17,12 @@ import {
 const RegistrationModal = ({
   showModal,
   setShowModal,
-  newName,  
+  newName,
   handleNewNameChange,
   newEmail,
   handleNewEmailChange,
   newPassword,
-  handleNewPasswordChange,  
+  handleNewPasswordChange,
   handleRegistration,
   registrationSuccess,
   showAlert_2,
@@ -69,7 +69,7 @@ const RegistrationModal = ({
               {showAlert_2 && (
                 <Alert status="error" mt="5" height="50px" borderRadius="8px">
                   <AlertIcon />
-                  <AlertTitle mr={2}>อีเมลหรือรหัสผ่านถูกใช้แล้ว</AlertTitle>
+                  <AlertTitle mr={2}>อีเมลถูกใช้แล้ว</AlertTitle>
                 </Alert>
               )}
               {showAlertNull && (

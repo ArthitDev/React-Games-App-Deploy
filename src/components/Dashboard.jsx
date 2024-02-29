@@ -11,6 +11,7 @@ import {
   Flex,
   Button,
   Container,
+  Spinner,
 } from "@chakra-ui/react";
 import { useApi } from "../api/ApiContext";
 import GameModalInsert from "./GameModalInsert";
@@ -19,6 +20,7 @@ import GameModalUpdate from "./GameModalUpdate";
 import LogoutConfirmationModal from "./LogoutConfirmationModal";
 import Pagination from "./Pagination";
 import SearchBoxAdmin from "./SearchBoxAdmin";
+import ArrowUpButton from "./ArrowUpButton";
 import "./Dashboard.css";
 
 const getGamesData = async (apiUrl) => {
@@ -41,16 +43,21 @@ const Dashboard = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedType, setSelectedType] = useState("all");
+  const [showScrollArrow, setShowScrollArrow] = useState(false);
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
   const cardsPerPage = 10;
   const navigate = useNavigate();
+  const [IsLoading, setIsLoading] = useState(false);
 
   const fetchData = async () => {
     try {
+      setIsLoading(true);
       const GamesData = await getGamesData(apiUrl);
       setData(GamesData);
     } catch (error) {
       console.error("An error occurred while fetching game data:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -84,6 +91,26 @@ const Dashboard = () => {
     }
   };
 
+  const handleScroll = () => {
+    const scrollThreshold = 300;
+    if (window.scrollY > scrollThreshold) {
+      setShowScrollArrow(true);
+    } else {
+      setShowScrollArrow(false);
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
+  const handleScrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   const openModal = () => {
     setIsModalOpen(true);
     setModalData({
@@ -111,8 +138,6 @@ const Dashboard = () => {
     try {
       const response = await axios.post(apiUrl, modalData);
       console.log("Data added:", response.data);
-
-      // Close the modal and update the data
       closeModal();
       fetchData();
     } catch (error) {
@@ -266,100 +291,116 @@ const Dashboard = () => {
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
-        <Container
-          maxW="container.xl"
-          mt="12"
-          pb="12px"
-          justifyContent="center"
-        >
-          <Grid
-            templateColumns={{
-              base: "repeat(1, 1fr)",
-              sm: "repeat(2, 1fr)",
-              md: "repeat(3, 1fr)",
-              lg: "repeat(4, 1fr)",
-              xl: "repeat(5, 1fr)",
-            }}
-            gap={6}
+        {IsLoading ? (
+          <Box
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            flexDirection="column"
           >
-            {filteredGames.length === 0 ? (
-              <Text
-                fontSize="xl"
-                color="gray.600"
-                textAlign="center"
-                gridColumn="1 / -1"
+            <Spinner size="xl" color="red" />
+            <Text mt="4" textAlign="center" color="gray.500">
+              กำลังโหลดข้อมูลเกม. . . . .
+            </Text>
+          </Box>
+        ) : (
+          <>
+            <Container
+              maxW="container.xl"
+              mt="12"
+              pb="12px"
+              justifyContent="center"
+            >
+              <Grid
+                templateColumns={{
+                  base: "repeat(1, 1fr)",
+                  sm: "repeat(2, 1fr)",
+                  md: "repeat(3, 1fr)",
+                  lg: "repeat(4, 1fr)",
+                  xl: "repeat(5, 1fr)",
+                }}
+                gap={6}
               >
-                ไม่พบเกม... ลองใช้คำอื่น
-              </Text>
-            ) : (
-              filteredGames.slice(startIndex, endIndex).map((game) => (
-                <GridItem key={game.game_id} colSpan={1}>
-                  <Flex
-                    borderWidth="1px"
-                    borderRadius="lg"
-                    overflow="hidden"
-                    boxShadow="lg"
-                    direction="column"
-                    h="100%"
+                {filteredGames.length === 0 ? (
+                  <Text
+                    fontSize="xl"
+                    color="gray.600"
+                    textAlign="center"
+                    gridColumn="1 / -1"
                   >
-                    <Image
-                      src={game.img}
-                      alt={game.game_name}
-                      maxH="300px"
-                      objectFit="cover"
-                    />
-                    <Button
-                      colorScheme="blue"
-                      mt={2}
-                      onClick={() => openUpdateModal(game.game_id)}
-                    >
-                      แก้ไขข้อมูล
-                    </Button>
-                    <Button
-                      colorScheme="red"
-                      mt={2}
-                      onClick={() => openDeleteModal(game.game_id)}
-                    >
-                      ลบข้อมูล
-                    </Button>
-
-                    <Box p="6" flex="1" textAlign="center">
-                      <Box
-                        d="flex"
-                        alignItems="center"
-                        justifyContent="center"
-                        mb="2"
+                    ไม่พบเกม... ลองใช้คำอื่น
+                  </Text>
+                ) : (
+                  filteredGames.slice(startIndex, endIndex).map((game) => (
+                    <GridItem key={game.game_id} colSpan={1}>
+                      <Flex
+                        borderWidth="1px"
+                        borderRadius="lg"
+                        overflow="hidden"
+                        boxShadow="lg"
+                        direction="column"
+                        h="100%"
                       >
-                        <Text
-                          color="gray.500"
-                          fontWeight="semibold"
-                          letterSpacing="wide"
+                        <Image
+                          src={game.img}
+                          alt={game.game_name}
+                          maxH="300px"
+                          objectFit="cover"
+                        />
+                        <Button
+                          colorScheme="blue"
+                          mt={2}
+                          onClick={() => openUpdateModal(game.game_id)}
                         >
-                          ลำดับ {game.game_id}
-                        </Text>
-                      </Box>
-                      <Text
-                        mt="1"
-                        fontWeight="semibold"
-                        fontSize="xl"
-                        lineHeight="tight"
-                      >
-                        {game.game_name}
-                      </Text>
-                      <Text mt="2" color="gray.600">
-                        {game.game_description.slice(0, 100)}
-                        {game.game_description.length > 100 ? "..." : ""}
-                      </Text>
-                      <Text mt="2" color="gray.600" fontStyle="italic">
-                        ประเภทเกม : {game.game_type}
-                      </Text>
-                    </Box>
-                  </Flex>
-                </GridItem>
-              ))
-            )}
-          </Grid>
-        </Container>
+                          แก้ไขข้อมูล
+                        </Button>
+                        <Button
+                          colorScheme="red"
+                          mt={2}
+                          onClick={() => openDeleteModal(game.game_id)}
+                        >
+                          ลบข้อมูล
+                        </Button>
+
+                        <Box p="6" flex="1" textAlign="center">
+                          <Box
+                            d="flex"
+                            alignItems="center"
+                            justifyContent="center"
+                            mb="2"
+                          >
+                            <Text
+                              color="gray.500"
+                              fontWeight="semibold"
+                              letterSpacing="wide"
+                            >
+                              ลำดับ {game.game_id}
+                            </Text>
+                          </Box>
+                          <Text
+                            mt="1"
+                            fontWeight="semibold"
+                            fontSize="xl"
+                            lineHeight="tight"
+                          >
+                            {game.game_name}
+                          </Text>
+                          <Text mt="2" color="gray.600">
+                            {game.game_description.slice(0, 100)}
+                            {game.game_description.length > 100 ? "..." : ""}
+                          </Text>
+                          <Text mt="2" color="gray.600" fontStyle="italic">
+                            ประเภทเกม : {game.game_type}
+                          </Text>
+                        </Box>
+                      </Flex>
+                    </GridItem>
+                  ))
+                )}
+              </Grid>
+            </Container>
+          </>
+        )}
       </Box>
       {filteredGames.length > 0 && (
         <Pagination
@@ -399,6 +440,7 @@ const Dashboard = () => {
         onConfirm={confirmLogout}
         onConfirmDelete={confirmLogoutAndDelete}
       />
+      {showScrollArrow && <ArrowUpButton onClick={handleScrollToTop} />}
     </ChakraProvider>
   );
 };

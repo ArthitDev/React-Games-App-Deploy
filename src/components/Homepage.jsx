@@ -11,7 +11,7 @@ import {
   Flex,
   extendTheme,
   ChakraProvider,
-  Select,
+  Spinner
 } from "@chakra-ui/react";
 import { useApi } from "../api/ApiContext";
 import WorkspacePremiumIcon from "@mui/icons-material/WorkspacePremium";
@@ -34,10 +34,10 @@ function Homepage() {
   const [filterType, setFilterType] = useState(null);
   const [selectedGameType, setSelectedGameType] = useState("");
   const cardsPerPage = 15;
-
-  // const divElementsInP = document.querySelectorAll("p > div");
+  const [IsLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
+    setIsLoading(true);
     axios
       .get(apiUrl)
       .then((response) => {
@@ -45,6 +45,9 @@ function Homepage() {
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   }, [apiUrl]);
 
@@ -57,7 +60,7 @@ function Homepage() {
   );
 
   const handleScroll = () => {
-    const scrollThreshold = 300; // Adjust this threshold as needed
+    const scrollThreshold = 300;
     if (window.scrollY > scrollThreshold) {
       setShowScrollArrow(true);
     } else {
@@ -93,9 +96,6 @@ function Homepage() {
     return matchesSearch && matchesType;
   });
 
-  // divElementsInP.forEach((divElement) => {
-  //   console.log("ดู Error",divElement);
-  // });
   const handleScrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -123,109 +123,131 @@ function Homepage() {
         pb="12px"
         justifyContent="center"
       >
-        {/* Search Input */}
         <SearchBox
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
-        <FilterSelect
-          games={games}
-          selectedGameType={selectedGameType}
-          setSelectedGameType={setSelectedGameType}
-        />
-        {/* Card Grid */}
-        <SimpleGrid
-          columns={{ base: 1, sm: 2, md: 3, lg: 4, xl: 5 }}
-          spacing={6}
-        >
-          {filteredGames.length === 0 ? (
-            <Text fontSize="xl" color="gray.600" textAlign="center" w="100%">
-              ไม่พบเกม... ลองใช้คำอื่น
+        {IsLoading ? (
+          <Box
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            flexDirection="column"
+          >
+            <Spinner size="xl" color="red" />
+            <Text mt="4" textAlign="center" color="gray.500">
+              กำลังโหลดข้อมูลเกม. . . . .
             </Text>
-          ) : (
-            sortedGames.slice(startIndex, endIndex).map((game) => (
-              <Box
-                key={game.game_id}
-                borderWidth="1px"
-                borderRadius="lg"
-                boxShadow="lg"
-                overflow="hidden"
-                onClick={() => handleGameClick(game)}
-                onMouseEnter={() => setHoveredGameId(game.game_id)}
-                onMouseLeave={() => setHoveredGameId(null)}
-                _hover={{ cursor: "pointer" }}
-              >
-                <Box position="relative">
-                  <Image
-                    src={game.img}
-                    alt={game.game_name}
-                    objectFit="cover"
-                    height="300px"
-                    width="100%"
-                    opacity={hoveredGameId === game.game_id ? 0.5 : 1}
-                    transition="opacity 0.40s"
-                  />
-                  {hoveredGameId === game.game_id && (
-                    <Text
-                      position="absolute"
-                      top="40%"
-                      left="50%"
-                      transform="translate(-50%, -50%)"
-                      fontSize="2xl"
-                      color="white"
-                      fontWeight="bold"
-                      textShadow="2px 2px 4px rgba(0, 0, 0, 0.5)"
-                    >
-                      คลิกเพื่อดู
-                    </Text>
-                  )}
-                  <Flex>
-                    <Text
-                      top="0"
-                      right="0"
-                      padding="2"
-                      textAlign="end"
-                      fontWeight="bold"
-                      color={
-                        game.score >= 80
-                          ? "gold"
-                          : game.score >= 50
-                          ? "green"
-                          : game.score >= 1
-                          ? "red"
-                          : "gray"
-                      }
-                    >
-                      <WorkspacePremiumIcon
-                        fontSize="large"
-                        color="primary"
-                        style={{ float: "left" }}
+          </Box>
+        ) : (
+          <>
+            <FilterSelect
+              games={games}
+              selectedGameType={selectedGameType}
+              setSelectedGameType={setSelectedGameType}
+            />
+            {/* Card Grid */}
+            <SimpleGrid
+              columns={{ base: 1, sm: 2, md: 3, lg: 4, xl: 5 }}
+              spacing={6}
+            >
+              {filteredGames.length === 0 ? (
+                <Text
+                  fontSize="xl"
+                  color="gray.600"
+                  textAlign="center"
+                  w="100%"
+                >
+                  ไม่พบเกม... ลองใช้คำอื่น
+                </Text>
+              ) : (
+                sortedGames.slice(startIndex, endIndex).map((game) => (
+                  <Box
+                    key={game.game_id}
+                    borderWidth="1px"
+                    borderRadius="lg"
+                    boxShadow="lg"
+                    overflow="hidden"
+                    onClick={() => handleGameClick(game)}
+                    onMouseEnter={() => setHoveredGameId(game.game_id)}
+                    onMouseLeave={() => setHoveredGameId(null)}
+                    _hover={{ cursor: "pointer" }}
+                  >
+                    <Box position="relative">
+                      <Image
+                        src={game.img}
+                        alt={game.game_name}
+                        objectFit="cover"
+                        height="300px"
+                        width="100%"
+                        opacity={hoveredGameId === game.game_id ? 0.5 : 1}
+                        transition="opacity 0.40s"
                       />
-                      คะแนน :{" "}
-                      {game.score ? `${game.score}/100.00` : "ไม่มีคะแนน"}
-                    </Text>
-                  </Flex>
-                </Box>
-                <Box p="4" flex="1" mt="-3">
-                  <Heading fontSize="xl">{game.game_name}</Heading>
-                  <Text mt="2" color="gray.500">
-                    {game.game_description.slice(0, 50)}
-                    {game.game_description.length > 50 ? (
-                      <>
-                        <span>{game.game_description.substring(0, 10)}...</span>
-                      </>
-                    ) : (
-                      game.game_description
-                    )}
-                  </Text>
-                  <Text mt="2" color="gray.600" fontStyle="italic">
-                    ประเภทเกม : {game.game_type}
-                  </Text>
-                </Box>
-              </Box>
-            ))
-          )}
-        </SimpleGrid>
+                      {hoveredGameId === game.game_id && (
+                        <Text
+                          position="absolute"
+                          top="40%"
+                          left="50%"
+                          transform="translate(-50%, -50%)"
+                          fontSize="2xl"
+                          color="white"
+                          fontWeight="bold"
+                          textShadow="2px 2px 4px rgba(0, 0, 0, 0.5)"
+                        >
+                          คลิกเพื่อดู
+                        </Text>
+                      )}
+                      <Flex>
+                        <Text
+                          top="0"
+                          right="0"
+                          padding="2"
+                          textAlign="end"
+                          fontWeight="bold"
+                          color={
+                            game.score >= 80
+                              ? "gold"
+                              : game.score >= 50
+                              ? "green"
+                              : game.score >= 1
+                              ? "red"
+                              : "gray"
+                          }
+                        >
+                          <WorkspacePremiumIcon
+                            fontSize="large"
+                            color="primary"
+                            style={{ float: "left" }}
+                          />
+                          คะแนน :{" "}
+                          {game.score ? `${game.score}/100.00` : "ไม่มีคะแนน"}
+                        </Text>
+                      </Flex>
+                    </Box>
+                    <Box p="4" flex="1" mt="-3">
+                      <Heading fontSize="xl">{game.game_name}</Heading>
+                      <Text mt="2" color="gray.500">
+                        {game.game_description.slice(0, 50)}
+                        {game.game_description.length > 50 ? (
+                          <>
+                            <span>
+                              {game.game_description.substring(0, 10)}...
+                            </span>
+                          </>
+                        ) : (
+                          game.game_description
+                        )}
+                      </Text>
+                      <Text mt="2" color="gray.600" fontStyle="italic">
+                        ประเภทเกม : {game.game_type}
+                      </Text>
+                    </Box>
+                  </Box>
+                ))
+              )}
+            </SimpleGrid>
+          </>
+        )}
       </Container>
       {filteredGames.length > 0 && (
         <Pagination

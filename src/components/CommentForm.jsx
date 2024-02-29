@@ -33,7 +33,6 @@ function CommentForm() {
     };
 
     try {
-      // ส่ง POST request ไปที่ API โดยใช้ apiUrl จาก context
       const response = await fetch(apiUrl, {
         method: "POST",
         headers: {

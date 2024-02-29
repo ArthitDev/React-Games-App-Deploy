@@ -4,7 +4,7 @@ const ApiContext = createContext();
 
 export const ApiProvider = ({ children }) => {
   const [apiUrl, setApiUrl] = useState(
-    "https://crabby-duck-bikini.cyclic.app/games"
+    "https://games-express-js.onrender.com/games"
   );
 
   return (

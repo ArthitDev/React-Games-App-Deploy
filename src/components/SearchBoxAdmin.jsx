@@ -4,7 +4,6 @@ import { FaSearch } from "react-icons/fa";
 
 function SearchBoxAdmin({ value, onChange }) {
   const windowWidth = window.innerWidth;
-
   const searchIconStyle = {
     position: "absolute",
     top: "28%",
@@ -22,10 +21,10 @@ function SearchBoxAdmin({ value, onChange }) {
     searchIconStyle.right = "21%";
   } else if (windowWidth <= 884) {
     searchIconStyle.right = "23%";
-  } else if (windowWidth <= 900 || windowWidth <= 1100 ) {
-      searchIconStyle.right = "27%";
+  } else if (windowWidth <= 900 || windowWidth <= 1100) {
+    searchIconStyle.right = "27%";
   } else {
-    searchIconStyle.right = windowWidth <= 1180 ? "25%" : "35%";
+    searchIconStyle.right = windowWidth <= 1180 ? "25%" : "36%";
   }
   return (
     <Box

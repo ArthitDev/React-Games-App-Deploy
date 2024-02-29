@@ -8,12 +8,12 @@ const Footer = () => {
       as="footer"
       bg={useColorModeValue("gray.300", "gray.900")}
       py={4}
-      position="sticky" // เปลี่ยนเป็น "fixed"
+      position="sticky"
       bottom={0}
-      width="100%" // เพิ่มคุณสมบัติ width เพื่อให้ footer เต็มความกว้างของหน้า
+      width="100%"
     >
       <Text color={textColor} textAlign="center">
-        641413017@ArthitDev+ChatGPT For CIT5603
+        Developed by ArthitDev
       </Text>
     </Box>
   );
