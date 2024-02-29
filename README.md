@@ -2,6 +2,6 @@
 ## โปรเจคเว็บไซต์เกม : ให้ผู้ใช้เข้ามาโหวตและให้คะแนนเกมที่ชอบ
 Web : Demo
 
-Not Complete : Call API Block By Cors
+Complete : Fix ALL 
 
 Link : https://react-games-voting.vercel.app/
