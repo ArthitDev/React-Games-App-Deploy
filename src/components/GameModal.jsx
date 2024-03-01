@@ -262,14 +262,16 @@ function GameModal({ isOpen, onClose, selectedGame }) {
               </FormLabel>
               <Slider
                 value={!isNaN(parseInt(vote)) ? parseInt(vote) : 0}
-                onChange={(value) => setVote(value.toString())}
+                onChange={(value) => {
+                  setVote(value.toString());
+                  setIsTooltipOpen(true);
+                }}
                 defaultValue={0}
                 min={0}
                 max={100}
                 step={1}
                 onMouseEnter={() => setIsTooltipOpen(true)}
                 onMouseDown={() => setIsSliderDragging(true)}
-                onValueChange={() => setIsTooltipOpen(true)}
               >
                 <SliderTrack>
                   <SliderFilledTrack />
