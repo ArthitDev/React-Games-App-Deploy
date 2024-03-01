@@ -286,7 +286,6 @@ function GameModal({ isOpen, onClose, selectedGame }) {
                 </Tooltip>
               </Slider>
             </FormControl>
-
             <Button
               type="button"
               colorScheme="blue"
@@ -297,7 +296,14 @@ function GameModal({ isOpen, onClose, selectedGame }) {
           </form>
         </ModalBody>
         <ModalFooter>
-          <Button colorScheme="red" onClick={onClose}>
+          <Button
+            colorScheme="red"
+            onClick={() => {
+              onClose();
+              setIsTooltipOpen(false);
+              setVote("0");
+            }}
+          >
             ปิด
           </Button>
         </ModalFooter>
