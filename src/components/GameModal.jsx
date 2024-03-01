@@ -269,6 +269,7 @@ function GameModal({ isOpen, onClose, selectedGame }) {
                 step={1}
                 onMouseEnter={() => setIsTooltipOpen(true)}
                 onMouseDown={() => setIsSliderDragging(true)}
+                onValueChange={() => setIsTooltipOpen(true)}
               >
                 <SliderTrack>
                   <SliderFilledTrack />
